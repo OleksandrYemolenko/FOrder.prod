@@ -18,7 +18,6 @@ public class DishActivity extends AppCompatActivity {
     private LinearLayoutManager manager;
     private DishRecyclerAdapter adapter;
     private Context context;
-    private View view;
     ArrayList<DishItem> items = new ArrayList<>();
 
     @Override
@@ -28,7 +27,8 @@ public class DishActivity extends AppCompatActivity {
 
         context = this;
 
-        items.add(new DishItem("Title", "url", 0, "300", "asd"));
+        items.add(new DishItem("Title", "http://images.media-allrecipes.com/userphotos/960x960/3758394.jpg", 0, "300", "asd"));
+        items.add(new DishItem("Big Title ooooo", "http://images.media-allrecipes.com/userphotos/960x960/3758394.jpg", 0, "300", "asd"));
 
         recyclerView = (RecyclerView) findViewById(R.id.dishRecView);
 

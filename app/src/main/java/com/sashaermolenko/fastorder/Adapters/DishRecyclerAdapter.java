@@ -7,8 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sashaermolenko.fastorder.Items.DishItem;
 import com.sashaermolenko.fastorder.R;
@@ -54,6 +57,29 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
                 dishItem.setVisOfFullName(!expanded);
             }
         });
+
+        holder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer pr = Integer.valueOf(holder.total_price.getText().toString()) + Integer.valueOf(dishItem.getPrice());
+                Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
+                holder.total_price.setText(Integer.toString(pr));
+                holder.amount.setText(Integer.toString(amount));
+
+                //notifyItemChanged(position);
+            }
+        });
+        holder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer pr = Math.max(Integer.valueOf(dishItem.getPrice()), Integer.valueOf(holder.total_price.getText().toString()) - Integer.valueOf(dishItem.getPrice()));
+                Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
+                holder.total_price.setText(Integer.toString(pr));
+                holder.amount.setText(Integer.toString(amount));
+
+                //notifyItemChanged(position);
+            }
+        });
     }
 
     @Override
@@ -63,19 +89,29 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, price, description;
+        private TextView title, price, description, total_price, total;
+        private Button plus, minus, purchase;
         private ImageView image;
         private View subItem;
+        private EditText amount;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
 
             subItem = itemView.findViewById(R.id.sub_item);
 
+            amount = (EditText) itemView.findViewById(R.id.dish_amount);
+            plus = (Button) itemView.findViewById(R.id.btn_plus);
+            minus = (Button) itemView.findViewById(R.id.btn_minus);
+            purchase = (Button) itemView.findViewById(R.id.purchase);
             title = (TextView) itemView.findViewById(R.id.title);
+            total = (TextView) itemView.findViewById(R.id.total);
+            total_price = (TextView) itemView.findViewById(R.id.total_price);
             price = (TextView) itemView.findViewById(R.id.price);
             description = (TextView) itemView.findViewById(R.id.description);
             title.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            total.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            total_price.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
             price.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
             description.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
 
@@ -88,6 +124,7 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
             boolean expanded = recyclerItem.getExpandable();
 
             title.setText(recyclerItem.getName());
+            total_price.setText(recyclerItem.getPrice());
             price.setText(recyclerItem.getPrice());
             description.setText(recyclerItem.getDescription());
             // TODO добавить текст button.setText();

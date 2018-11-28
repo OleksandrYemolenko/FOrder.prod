@@ -13,7 +13,7 @@ public class DishItem extends Item {
 
     @Override
     public String getName() {
-        return showFullName == true ? super.getName() : super.getName().substring(0, Math.min(9, super.getName().length())) + "...";
+        return showFullName == true ? super.getName() : super.getName().substring(0, Math.min(9, super.getName().length())) + (super.getName().length() > 9 ? "..." : "");
     }
 
     public void setVisOfFullName(boolean showFullName) {
