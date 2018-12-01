@@ -7,14 +7,10 @@
         android:bottomRightRadius="30dp"
         />
     <solid
-        android:color="#4F4F4F"
+        android:color="#c5661fff"
         />
     <size
         android:width="60dp"
         android:height="30dp"
-        />
-    <stroke
-        android:width="0.5dp"
-        android:color="#878787"
         />
 </shape>

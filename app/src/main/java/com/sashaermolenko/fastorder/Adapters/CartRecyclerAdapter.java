@@ -13,19 +13,18 @@ import android.widget.TextView;
 
 import com.sashaermolenko.fastorder.DishActivity;
 import com.sashaermolenko.fastorder.Items.MenuItem;
-import com.sashaermolenko.fastorder.MainActivity;
 import com.sashaermolenko.fastorder.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.RecyclerViewHolder>{
+public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapter.RecyclerViewHolder>{
 
     private Context context;
     private ArrayList<MenuItem> items = new ArrayList<>();
 
-    public MenuRecyclerAdapter(Context context) {
+    public CartRecyclerAdapter(Context context) {
         this.context = context;
         items.add(new MenuItem("Соки", "https://healthynibblesandbits.com/wp-content/uploads/2016/11/How-to-Cut-a-Pomegranate-FF.jpg", 0));
         items.add(new MenuItem("Пицца", "https://www.slivki.by/znijki-media/w522_322/default/1009921/146.jpg", 1));

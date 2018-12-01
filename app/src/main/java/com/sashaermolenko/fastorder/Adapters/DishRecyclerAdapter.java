@@ -54,6 +54,9 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
                 boolean expanded = dishItem.getExpandable();
                 dishItem.setExpanded(!expanded);
                 notifyItemChanged(position);
+                holder.amount.setText("1");
+                holder.total_price.setText(dishItem.getPrice());
+                holder.comment.setText("");
                 dishItem.setVisOfFullName(!expanded);
             }
         });
@@ -89,18 +92,19 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, price, description, total_price, total;
+        private TextView title, price, description, total_price, total, amount;
         private Button plus, minus, purchase;
         private ImageView image;
         private View subItem;
-        private EditText amount;
+        private EditText comment;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
 
             subItem = itemView.findViewById(R.id.sub_item);
 
-            amount = (EditText) itemView.findViewById(R.id.dish_amount);
+            amount = (TextView) itemView.findViewById(R.id.dish_amount);
+            comment = (EditText) itemView.findViewById(R.id.comment);
             plus = (Button) itemView.findViewById(R.id.btn_plus);
             minus = (Button) itemView.findViewById(R.id.btn_minus);
             purchase = (Button) itemView.findViewById(R.id.purchase);
