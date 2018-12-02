@@ -2,6 +2,8 @@ package com.sashaermolenko.fastorder.Items;
 
 public class DishItem extends Item {
     private String price;
+    private String comment;
+    private int amount = 1;
     private String description;
     private boolean showFullName = false;
 
@@ -14,6 +16,22 @@ public class DishItem extends Item {
     @Override
     public String getName() {
         return showFullName == true ? super.getName() : super.getName().substring(0, Math.min(9, super.getName().length())) + (super.getName().length() > 9 ? "..." : "");
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setAmount(int eps) {
+        amount += eps;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void setVisOfFullName(boolean showFullName) {

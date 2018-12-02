@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.r0adkll.slidr.Slidr;
 import com.sashaermolenko.fastorder.Adapters.DishRecyclerAdapter;
 import com.sashaermolenko.fastorder.Items.DishItem;
 
@@ -37,5 +38,7 @@ public class DishActivity extends AppCompatActivity {
 
         adapter = new DishRecyclerAdapter(context, items);
         recyclerView.setAdapter(adapter);
+
+        Slidr.attach(this);
     }
 }

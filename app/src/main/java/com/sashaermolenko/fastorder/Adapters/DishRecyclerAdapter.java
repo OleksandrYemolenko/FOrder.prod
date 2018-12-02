@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sashaermolenko.fastorder.Items.CartItem;
 import com.sashaermolenko.fastorder.Items.DishItem;
+import com.sashaermolenko.fastorder.MainActivity;
 import com.sashaermolenko.fastorder.R;
 import com.squareup.picasso.Picasso;
 
@@ -54,9 +56,6 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
                 boolean expanded = dishItem.getExpandable();
                 dishItem.setExpanded(!expanded);
                 notifyItemChanged(position);
-                holder.amount.setText("1");
-                holder.total_price.setText(dishItem.getPrice());
-                holder.comment.setText("");
                 dishItem.setVisOfFullName(!expanded);
             }
         });
@@ -64,23 +63,45 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer pr = Integer.valueOf(holder.total_price.getText().toString()) + Integer.valueOf(dishItem.getPrice());
                 Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
+                Integer pr = Integer.valueOf(dishItem.getPrice()) * amount;
                 holder.total_price.setText(Integer.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
-
+                dishItem.setAmount(1);
                 //notifyItemChanged(position);
             }
         });
         holder.minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer pr = Math.max(Integer.valueOf(dishItem.getPrice()), Integer.valueOf(holder.total_price.getText().toString()) - Integer.valueOf(dishItem.getPrice()));
                 Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
+                Integer pr = Integer.valueOf(dishItem.getPrice()) * amount;
                 holder.total_price.setText(Integer.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
-
+                dishItem.setAmount(-1);
                 //notifyItemChanged(position);
+            }
+        });
+        holder.purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dishItem.setComment(holder.comment.getText().toString());
+
+                String title = dishItem.getName();
+                String imgUrl = dishItem.getURL();
+                int id = items.size();
+                int amount = dishItem.getAmount();
+                String price = dishItem.getPrice();
+                String desc = dishItem.getDescription();
+                String comment = dishItem.getComment();
+                CartItem cartItem = new CartItem(title, imgUrl, id, price, desc, comment, amount);
+                MainActivity.cartItems.add(cartItem);
+
+                boolean expanded = dishItem.getExpandable();
+                dishItem.setExpanded(!expanded);
+                notifyItemChanged(position);
+                dishItem.setVisOfFullName(!expanded);
             }
         });
     }
@@ -127,8 +148,9 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
         public void bind(final DishItem recyclerItem) {
             boolean expanded = recyclerItem.getExpandable();
 
+
+            comment.setText(recyclerItem.getComment());
             title.setText(recyclerItem.getName());
-            total_price.setText(recyclerItem.getPrice());
             price.setText(recyclerItem.getPrice());
             description.setText(recyclerItem.getDescription());
             // TODO добавить текст button.setText();
@@ -136,6 +158,10 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
 
             subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
             price.setVisibility(expanded ? View.INVISIBLE : View.VISIBLE);
+
+            Integer am = Integer.valueOf(amount.getText().toString());
+            Integer pr = Integer.valueOf(recyclerItem.getPrice()) * am;
+            total_price.setText(Integer.toString(pr));
         }
     }
 }

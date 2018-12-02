@@ -32,4 +32,8 @@ public class Item {
     public boolean getExpandable() {
         return expanded;
     }
+
+    public void changeId() {
+        --id;
+    }
 }

@@ -8,11 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sashaermolenko.fastorder.DishActivity;
-import com.sashaermolenko.fastorder.Items.MenuItem;
+import com.sashaermolenko.fastorder.Fragments.CartFragment;
+import com.sashaermolenko.fastorder.Items.CartItem;
+import com.sashaermolenko.fastorder.Items.DishItem;
+import com.sashaermolenko.fastorder.MainActivity;
 import com.sashaermolenko.fastorder.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,18 +26,18 @@ import java.util.List;
 
 public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapter.RecyclerViewHolder>{
 
+    private int totalPrice = 0;
     private Context context;
-    private ArrayList<MenuItem> items = new ArrayList<>();
+    private ArrayList<CartItem> items = new ArrayList<>();
 
     public CartRecyclerAdapter(Context context) {
         this.context = context;
-        items.add(new MenuItem("Соки", "https://healthynibblesandbits.com/wp-content/uploads/2016/11/How-to-Cut-a-Pomegranate-FF.jpg", 0));
-        items.add(new MenuItem("Пицца", "https://www.slivki.by/znijki-media/w522_322/default/1009921/146.jpg", 1));
-        items.add(new MenuItem("Кофе", "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/701/coffee-mug-1493946797.jpg", 2));
-        items.add(new MenuItem("Стейки", "https://cdn.lifehacker.ru/wp-content/uploads/2018/05/20-laJfxakov-dlya-prigotovleniya-deJstvitelno-bozhestvennogo-steJka_1526682003-1140x570.jpg", 3));
+        items = MainActivity.cartItems;
+        for(int i = 0; i < items.size(); ++i)
+            totalPrice += items.get(i).getAmount() * Integer.valueOf(items.get(i).getPrice());
     }
 
-    public void addAll(List<MenuItem> items) {
+    public void addAll(List<CartItem> items) {
         int pos = getItemCount();
         this.items.addAll(items);
         notifyItemRangeInserted(pos, this.items.size());
@@ -41,25 +46,52 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.menuitem, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.cartitem, parent, false);
         return new RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
-        final MenuItem menuItem = items.get(position);
+        final CartItem cartItem = items.get(position);
 
-        holder.bind(menuItem);
+        holder.bind(cartItem);
 
         holder.itemView.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, DishActivity.class);
-                i.putExtra("category", Integer.toString(menuItem.getId()));
-                i.putExtra("category_name", menuItem.getName());
-                    context.startActivity(i);
+                boolean expanded = cartItem.getExpandable();
+                cartItem.setExpanded(!expanded);
+                notifyItemChanged(position);
+                cartItem.setVisOfFullName(!expanded);
+            }
+        });
+        holder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
+                Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
+                holder.total_price.setText(Integer.toString(pr));
+                holder.amount.setText(Integer.toString(amount));
 
-                //MainActivity.ChangeAct(context);
+                //notifyItemChanged(position);
+            }
+        });
+        holder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
+                Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
+                holder.total_price.setText(Integer.toString(pr));
+                holder.amount.setText(Integer.toString(amount));
+
+                //notifyItemChanged(position);
+            }
+        });
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                items.remove(position);
+                notifyDataSetChanged();
             }
         });
     }
@@ -71,23 +103,55 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title;
+        private TextView title, price, description, total_price, total, amount;
+        private Button plus, minus, delete;
         private ImageView image;
+        private View subItem;
+        private EditText comment;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            title = (TextView) itemView.findViewById(R.id.title);
-            title.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            subItem = itemView.findViewById(R.id.sub_item_cart);
 
-            image = (ImageView) itemView.findViewById(R.id.imgMenu);
+            amount = (TextView) itemView.findViewById(R.id.dish_amount_cart);
+            delete = (Button) itemView.findViewById(R.id.delete_cart);
+            comment = (EditText) itemView.findViewById(R.id.comment_cart);
+            plus = (Button) itemView.findViewById(R.id.btn_plus_cart);
+            minus = (Button) itemView.findViewById(R.id.btn_minus_cart);
+            title = (TextView) itemView.findViewById(R.id.title_cart);
+            total = (TextView) itemView.findViewById(R.id.total_cart);
+            total_price = (TextView) itemView.findViewById(R.id.total_price_cart);
+            price = (TextView) itemView.findViewById(R.id.price_cart);
+            description = (TextView) itemView.findViewById(R.id.description_cart);
+            title.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            total.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            total_price.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            price.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+            description.setTypeface(Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf"));
+
+            image = (ImageView) itemView.findViewById(R.id.imgD_cart);
+
+            //image.setImageResource(R.drawable.no_img); //
         }
 
-        public void bind(final MenuItem recyclerItem) {
+        public void bind(final CartItem recyclerItem) {
+            boolean expanded = recyclerItem.getExpandable();
 
+            comment.setText(recyclerItem.getComment());
+            amount.setText(Integer.toString(recyclerItem.getAmount()));
             title.setText(recyclerItem.getName());
-           // image.setImageResource(R.drawable.ic_dashboard_black_24dp);
-            Picasso.with(context.getApplicationContext()).load(recyclerItem.getURL()).into(image);
+            description.setText(recyclerItem.getDescription());
+            // TODO добавить текст button.setText();
+            Picasso.with(context).load(recyclerItem.getURL()).into(image);
+
+            subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            price.setVisibility(expanded ? View.INVISIBLE : View.VISIBLE);
+
+            Integer am = Integer.valueOf(amount.getText().toString());
+            Integer pr = Integer.valueOf(recyclerItem.getPrice()) * am;
+            total_price.setText(Integer.toString(pr));
+            price.setText(Integer.toString(pr));
         }
     }
 }

@@ -16,11 +16,15 @@ import com.sashaermolenko.fastorder.Fragments.CartFragment;
 import com.sashaermolenko.fastorder.Fragments.HistoryFragment;
 import com.sashaermolenko.fastorder.Fragments.MenuFragment;
 import com.sashaermolenko.fastorder.Fragments.SettingsFragment;
+import com.sashaermolenko.fastorder.Items.CartItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout frameLayout;
     private BottomNavigationView navigation;
+    public static ArrayList<CartItem> cartItems = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
