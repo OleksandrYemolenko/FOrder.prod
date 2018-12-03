@@ -68,6 +68,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cartItem.setAmount(1);
                 Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
                 Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
                 holder.total_price.setText(Integer.toString(pr));
@@ -79,11 +80,16 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         holder.minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
-                Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
-                holder.total_price.setText(Integer.toString(pr));
-                holder.amount.setText(Integer.toString(amount));
-
+                if(cartItem.getAmount() == 1) {
+                    items.remove(position);
+                    notifyDataSetChanged();
+                } else {
+                    cartItem.setAmount(-1);
+                    Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
+                    Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
+                    holder.total_price.setText(Integer.toString(pr));
+                    holder.amount.setText(Integer.toString(amount));
+                }
                 //notifyItemChanged(position);
             }
         });

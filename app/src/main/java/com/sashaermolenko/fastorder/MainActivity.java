@@ -18,6 +18,8 @@ import com.sashaermolenko.fastorder.Fragments.MenuFragment;
 import com.sashaermolenko.fastorder.Fragments.SettingsFragment;
 import com.sashaermolenko.fastorder.Items.CartItem;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private BottomNavigationView navigation;
     public static ArrayList<CartItem> cartItems = new ArrayList<>();
+    public static ArrayList<String> spots;
+    public static ArrayList<JSONObject> spotsObjects;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

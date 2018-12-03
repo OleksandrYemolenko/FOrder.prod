@@ -17,7 +17,11 @@ import android.widget.Toast;
 
 import com.sashaermolenko.fastorder.Adapters.CartRecyclerAdapter;
 import com.sashaermolenko.fastorder.Adapters.MenuRecyclerAdapter;
+import com.sashaermolenko.fastorder.DishActivity;
+import com.sashaermolenko.fastorder.Items.DishItem;
 import com.sashaermolenko.fastorder.Items.MenuItem;
+import com.sashaermolenko.fastorder.MainActivity;
+import com.sashaermolenko.fastorder.OrderPayActivity;
 import com.sashaermolenko.fastorder.R;
 
 import java.util.ArrayList;
@@ -29,7 +33,14 @@ public class CartFragment extends Fragment {
     private CartRecyclerAdapter adapter;
     private Context context;
     private View view;
+    private Intent intent;
     public static TextView totalPrice;
+    private boolean clear = false;
+
+    public void updateData() {
+        MainActivity.cartItems.clear();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,24 +49,24 @@ public class CartFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        try {
-            recyclerView = (RecyclerView) view.findViewById(R.id.cartRecView);
+        context = container.getContext();
 
-            manager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(manager);
+        recyclerView = (RecyclerView) view.findViewById(R.id.cartRecView);
 
-            adapter = new CartRecyclerAdapter(getContext());
-            recyclerView.setAdapter(adapter);
-        } catch (Exception e) {
-            //Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+        manager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(manager);
+
+        adapter = new CartRecyclerAdapter(getContext());
+        recyclerView.setAdapter(adapter);
+
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent = new Intent(context, OrderPayActivity.class);
-                //startActivity(intent);
+                intent = new Intent(context, OrderPayActivity.class);
+                context.startActivity(intent);
+                clear = true;
             }
         });
 
@@ -65,5 +76,14 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(clear == true) {
+            updateData();
+            clear = false;
+        }
     }
 }

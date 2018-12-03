@@ -78,7 +78,7 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
                 Integer pr = Integer.valueOf(dishItem.getPrice()) * amount;
                 holder.total_price.setText(Integer.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
-                dishItem.setAmount(-1);
+                if(dishItem.getAmount() != 1) dishItem.setAmount(-1);
                 //notifyItemChanged(position);
             }
         });
