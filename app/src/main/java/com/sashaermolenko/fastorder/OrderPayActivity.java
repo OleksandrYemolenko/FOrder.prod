@@ -38,6 +38,7 @@ import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
+import com.sashaermolenko.fastorder.Adapters.CartRecyclerAdapter;
 import com.sashaermolenko.fastorder.Fragments.CartFragment;
 import com.sashaermolenko.fastorder.Google.GooglePay;
 import com.sashaermolenko.fastorder.Google.MapsActivity;
@@ -235,6 +236,7 @@ public class OrderPayActivity extends AppCompatActivity {
         });
 
         price = (TextView) findViewById(R.id.priceO);
+        price.setText(CartRecyclerAdapter.getTotalPrice() + '$');
         time = (TextView) findViewById(R.id.timeO);
         map = (Button) findViewById(R.id.mapB);
         timeD = (Button) findViewById(R.id.timeD);

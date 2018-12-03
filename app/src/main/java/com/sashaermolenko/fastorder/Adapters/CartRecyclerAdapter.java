@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapter.RecyclerViewHolder>{
 
-    private int totalPrice = 0;
+    private static int totalPrice = 0;
     private Context context;
     private ArrayList<CartItem> items = new ArrayList<>();
 
@@ -35,6 +35,10 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         items = MainActivity.cartItems;
         for(int i = 0; i < items.size(); ++i)
             totalPrice += items.get(i).getAmount() * Integer.valueOf(items.get(i).getPrice());
+    }
+
+    public static String getTotalPrice() {
+        return Integer.toString(totalPrice);
     }
 
     public void addAll(List<CartItem> items) {
