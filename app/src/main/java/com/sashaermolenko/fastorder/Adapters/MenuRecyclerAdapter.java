@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sashaermolenko.fastorder.DishActivity;
 import com.sashaermolenko.fastorder.Items.MenuItem;
@@ -23,6 +24,7 @@ import java.util.List;
 public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.RecyclerViewHolder>{
 
     private Context context;
+    public static int categoty;
     private ArrayList<MenuItem> items = new ArrayList<>();
 
     public MenuRecyclerAdapter(Context context) {
@@ -56,10 +58,8 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, DishActivity.class);
-                i.putExtra("category", Integer.toString(menuItem.getId()));
-                i.putExtra("category_name", menuItem.getName());
-                    context.startActivity(i);
-
+                context.startActivity(i);
+                categoty = menuItem.getId();
                 //MainActivity.ChangeAct(context);
             }
         });

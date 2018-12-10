@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int flag = 0;
     private FrameLayout frameLayout;
     private BottomNavigationView navigation;
     public static ArrayList<CartItem> cartItems = new ArrayList<>();

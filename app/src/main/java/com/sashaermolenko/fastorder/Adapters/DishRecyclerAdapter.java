@@ -1,7 +1,9 @@
 package com.sashaermolenko.fastorder.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sashaermolenko.fastorder.DishActivity;
 import com.sashaermolenko.fastorder.Items.CartItem;
 import com.sashaermolenko.fastorder.Items.DishItem;
 import com.sashaermolenko.fastorder.MainActivity;
@@ -20,15 +23,24 @@ import com.sashaermolenko.fastorder.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapter.RecyclerViewHolder> {
-    private final Context context;
+    private Context context;
     ArrayList<DishItem> items = new ArrayList<>();
 
-    public DishRecyclerAdapter(Context context, ArrayList<DishItem> items) {
+    public DishRecyclerAdapter(Context context) {
         this.context = context;
-        this.items = items;
+        if(MenuRecyclerAdapter.categoty == 0)
+            this.items = DishActivity.items_1;
+        else if(MenuRecyclerAdapter.categoty == 1)
+            this.items = DishActivity.items_2;
+        else if(MenuRecyclerAdapter.categoty == 2)
+            this.items = DishActivity.items_3;
+        else if(MenuRecyclerAdapter.categoty == 3)
+            this.items = DishActivity.items_4;
     }
     
     public void addAll(List<DishItem> items) {

@@ -38,6 +38,7 @@ import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
+import com.r0adkll.slidr.Slidr;
 import com.sashaermolenko.fastorder.Adapters.CartRecyclerAdapter;
 import com.sashaermolenko.fastorder.Fragments.CartFragment;
 import com.sashaermolenko.fastorder.Google.GooglePay;
@@ -102,6 +103,8 @@ public class OrderPayActivity extends AppCompatActivity {
                                 .build());
 
         possiblyShowGooglePayButton();
+
+        Slidr.attach(this);
 
         bind();
 
