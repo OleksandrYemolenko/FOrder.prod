@@ -15,6 +15,22 @@
             android:id="@+id/cartRecView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:id="@+id/clear"
+            android:background="@drawable/buttonshape"/>
+           <!--
+                android:onClick="clearCartList"
+           -->
+
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:id="@+id/payment"
+            android:background="@drawable/buttonshape"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
