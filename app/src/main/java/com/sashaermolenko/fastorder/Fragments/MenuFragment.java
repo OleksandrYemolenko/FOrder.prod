@@ -29,7 +29,6 @@ public class MenuFragment extends Fragment {
     private MenuRecyclerAdapter adapter;
     private Context context;
     private View view;
-    ArrayList<MenuItem> items = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

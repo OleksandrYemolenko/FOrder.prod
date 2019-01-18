@@ -64,6 +64,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
             @Override
             public void onClick(View v) {
                 boolean expanded = cartItem.getExpandable();
+                cartItem.setComment(holder.comment.getText().toString());
                 cartItem.setExpanded(!expanded);
                 notifyItemChanged(position);
                 cartItem.setVisOfFullName(!expanded);
@@ -77,7 +78,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
                 Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
                 holder.total_price.setText(Integer.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
-
+                totalPrice += Integer.valueOf(cartItem.getPrice());
                 //notifyItemChanged(position);
             }
         });
@@ -94,12 +95,14 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
                     holder.total_price.setText(Integer.toString(pr));
                     holder.amount.setText(Integer.toString(amount));
                 }
+                totalPrice -= Integer.valueOf(cartItem.getPrice());
                 //notifyItemChanged(position);
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                totalPrice -= Integer.valueOf(cartItem.getPrice())*cartItem.getAmount();
                 items.remove(position);
                 notifyDataSetChanged();
             }
@@ -161,7 +164,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
             Integer am = Integer.valueOf(amount.getText().toString());
             Integer pr = Integer.valueOf(recyclerItem.getPrice()) * am;
             total_price.setText(Integer.toString(pr));
-            price.setText(Integer.toString(pr));
+            price.setText(Integer.toString(pr) + '₴');
         }
     }
 }

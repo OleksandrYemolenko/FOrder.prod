@@ -239,7 +239,7 @@ public class OrderPayActivity extends AppCompatActivity {
         });
 
         price = (TextView) findViewById(R.id.priceO);
-        price.setText(CartRecyclerAdapter.getTotalPrice() + '$');
+        price.setText(CartRecyclerAdapter.getTotalPrice() + '₴');
         time = (TextView) findViewById(R.id.timeO);
         map = (Button) findViewById(R.id.mapB);
         timeD = (Button) findViewById(R.id.timeD);

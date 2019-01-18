@@ -30,7 +30,7 @@
             tools:text="24.12.1964" />
 
         <TextView
-            android:id="@+id/priceHist"
+            android:id="@+id/price_hist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"

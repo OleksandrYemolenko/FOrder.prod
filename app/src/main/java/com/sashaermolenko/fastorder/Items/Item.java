@@ -13,6 +13,7 @@ public class Item {
         this.title = title;
         this.imgURL = imgURL;
         this.id = id;
+    } Item() {
     }
 
     public int getId() {

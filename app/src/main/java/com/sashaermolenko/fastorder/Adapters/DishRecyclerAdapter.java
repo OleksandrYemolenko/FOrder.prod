@@ -66,6 +66,7 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
             @Override
             public void onClick(View v) {
                 boolean expanded = dishItem.getExpandable();
+                dishItem.setComment(holder.comment.getText().toString());
                 dishItem.setExpanded(!expanded);
                 notifyItemChanged(position);
                 dishItem.setVisOfFullName(!expanded);
@@ -163,7 +164,7 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
 
             comment.setText(recyclerItem.getComment());
             title.setText(recyclerItem.getName());
-            price.setText(recyclerItem.getPrice());
+            price.setText(recyclerItem.getPrice() + '₴');
             description.setText(recyclerItem.getDescription());
             // TODO добавить текст button.setText();
             Picasso.with(context).load(recyclerItem.getURL()).into(image);

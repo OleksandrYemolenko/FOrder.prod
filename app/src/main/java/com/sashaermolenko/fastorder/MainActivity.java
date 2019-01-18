@@ -17,6 +17,7 @@ import com.sashaermolenko.fastorder.Fragments.HistoryFragment;
 import com.sashaermolenko.fastorder.Fragments.MenuFragment;
 import com.sashaermolenko.fastorder.Fragments.SettingsFragment;
 import com.sashaermolenko.fastorder.Items.CartItem;
+import com.sashaermolenko.fastorder.Items.HistoryItem;
 
 import org.json.JSONObject;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private BottomNavigationView navigation;
     public static ArrayList<CartItem> cartItems = new ArrayList<>();
+    public static ArrayList<HistoryItem> historyItems = new ArrayList<>();
     public static ArrayList<String> spots;
     public static ArrayList<JSONObject> spotsObjects;
 
@@ -86,5 +88,15 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, menuFragment);
         fragmentTransaction.commit();
+
+        historyItems = getHistoryItems();
+    }
+
+    private ArrayList<HistoryItem> getHistoryItems() {
+        ArrayList<HistoryItem> historyItems = new ArrayList<>();
+
+        historyItems.add(new HistoryItem("01.01.2019", "300"));
+
+        return historyItems;
     }
 }

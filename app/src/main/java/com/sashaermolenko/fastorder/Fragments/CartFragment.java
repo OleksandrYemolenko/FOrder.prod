@@ -35,12 +35,6 @@ public class CartFragment extends Fragment {
     private View view;
     private Intent intent;
     public static TextView totalPrice;
-    private boolean clear = false;
-
-    public void updateData() {
-        MainActivity.cartItems.clear();
-        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +60,6 @@ public class CartFragment extends Fragment {
             public void onClick(View v) {
                 intent = new Intent(context, OrderPayActivity.class);
                 context.startActivity(intent);
-                clear = true;
             }
         });
 
@@ -76,14 +69,5 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(clear == true) {
-            updateData();
-            clear = false;
-        }
     }
 }
