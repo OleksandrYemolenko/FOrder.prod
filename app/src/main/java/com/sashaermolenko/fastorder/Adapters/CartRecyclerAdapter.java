@@ -34,8 +34,9 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         this.context = context;
         items = MainActivity.cartItems;
         totalPrice = 0;
-        for(int i = 0; i < items.size(); ++i)
-            totalPrice += items.get(i).getAmount() * Integer.valueOf(items.get(i).getPrice());
+        for(int i = 0; i < items.size(); ++i){
+            totalPrice += items.get(i).getAmount() * Double.valueOf(items.get(i).getPrice());
+        }
     }
 
     public static String getTotalPrice() {
@@ -76,10 +77,10 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
             public void onClick(View view) {
                 cartItem.setAmount(1);
                 Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
-                Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
-                holder.total_price.setText(Integer.toString(pr));
+                Double pr = Double.valueOf(cartItem.getPrice()) * amount;
+                holder.total_price.setText(Double.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
-                totalPrice += Integer.valueOf(cartItem.getPrice());
+                totalPrice += Double.valueOf(cartItem.getPrice());
                 //notifyItemChanged(position);
             }
         });
@@ -92,18 +93,18 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
                 } else {
                     cartItem.setAmount(-1);
                     Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
-                    Integer pr = Integer.valueOf(cartItem.getPrice()) * amount;
-                    holder.total_price.setText(Integer.toString(pr));
+                    Double pr = Double.valueOf(cartItem.getPrice()) * amount;
+                    holder.total_price.setText(Double.toString(pr));
                     holder.amount.setText(Integer.toString(amount));
                 }
-                totalPrice -= Integer.valueOf(cartItem.getPrice());
+                totalPrice -= Double.valueOf(cartItem.getPrice());
                 //notifyItemChanged(position);
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                totalPrice -= Integer.valueOf(cartItem.getPrice())*cartItem.getAmount();
+                totalPrice -= Double.valueOf(cartItem.getPrice())*cartItem.getAmount();
                 items.remove(position);
                 notifyDataSetChanged();
             }
@@ -163,9 +164,9 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
             price.setVisibility(expanded ? View.INVISIBLE : View.VISIBLE);
 
             Integer am = Integer.valueOf(amount.getText().toString());
-            Integer pr = Integer.valueOf(recyclerItem.getPrice()) * am;
-            total_price.setText(Integer.toString(pr));
-            price.setText(Integer.toString(pr) + '₴');
+            Double pr = Double.valueOf(recyclerItem.getPrice()) * am;
+            total_price.setText(Double.toString(pr));
+            price.setText(Double.toString(pr) + '₴');
         }
     }
 }

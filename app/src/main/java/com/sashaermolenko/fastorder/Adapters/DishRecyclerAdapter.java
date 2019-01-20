@@ -3,6 +3,7 @@ package com.sashaermolenko.fastorder.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,31 +17,45 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sashaermolenko.fastorder.DishActivity;
+import com.sashaermolenko.fastorder.Handler;
 import com.sashaermolenko.fastorder.Items.CartItem;
 import com.sashaermolenko.fastorder.Items.DishItem;
 import com.sashaermolenko.fastorder.MainActivity;
 import com.sashaermolenko.fastorder.R;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapter.RecyclerViewHolder> {
+    private int category;
     private Context context;
     ArrayList<DishItem> items = new ArrayList<>();
 
     public DishRecyclerAdapter(Context context) {
         this.context = context;
-        if(MenuRecyclerAdapter.categoty == 0)
-            this.items = DishActivity.items_1;
-        else if(MenuRecyclerAdapter.categoty == 1)
-            this.items = DishActivity.items_2;
-        else if(MenuRecyclerAdapter.categoty == 2)
-            this.items = DishActivity.items_3;
-        else if(MenuRecyclerAdapter.categoty == 3)
-            this.items = DishActivity.items_4;
+        category = MenuRecyclerAdapter.categoty;
+        new AsyncRequest().execute();
+//        if(MenuRecyclerAdapter.categoty == 0)
+//            this.items = DishActivity.items_1;
+//        else if(MenuRecyclerAdapter.categoty == 1)
+//            this.items = DishActivity.items_2;
+//        else if(MenuRecyclerAdapter.categoty == 2)
+//            this.items = DishActivity.items_3;
+//        else if(MenuRecyclerAdapter.categoty == 3)
+//            this.items = DishActivity.items_4;
     }
     
     public void addAll(List<DishItem> items) {
@@ -77,8 +92,8 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
             @Override
             public void onClick(View view) {
                 Integer amount = Integer.valueOf(holder.amount.getText().toString()) + 1;
-                Integer pr = Integer.valueOf(dishItem.getPrice()) * amount;
-                holder.total_price.setText(Integer.toString(pr));
+                Double pr = Double.valueOf(dishItem.getPrice()) * amount;
+                holder.total_price.setText(Double.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
                 dishItem.setAmount(1);
                 //notifyItemChanged(position);
@@ -88,8 +103,8 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
             @Override
             public void onClick(View view) {
                 Integer amount = Math.max(1, Integer.valueOf(holder.amount.getText().toString()) - 1);
-                Integer pr = Integer.valueOf(dishItem.getPrice()) * amount;
-                holder.total_price.setText(Integer.toString(pr));
+                Double pr = Double.valueOf(dishItem.getPrice()) * amount;
+                holder.total_price.setText(Double.toString(pr));
                 holder.amount.setText(Integer.toString(amount));
                 if(dishItem.getAmount() != 1) dishItem.setAmount(-1);
                 //notifyItemChanged(position);
@@ -173,8 +188,61 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
             price.setVisibility(expanded ? View.INVISIBLE : View.VISIBLE);
 
             Integer am = Integer.valueOf(amount.getText().toString());
-            Integer pr = Integer.valueOf(recyclerItem.getPrice()) * am;
-            total_price.setText(Integer.toString(pr));
+            Double pr = Double.valueOf(recyclerItem.getPrice()) * am;
+            total_price.setText(Double.toString(pr));
+        }
+    }
+
+    class AsyncRequest extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL url = new URL(Handler.createLink("menu.getProducts", "category_id=" + category));
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                BufferedReader bf = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                String content = "", line = "";
+                while((line = bf.readLine()) != null) {
+                    content += line;
+                }
+
+                con.disconnect();
+                return content;
+            } catch (MalformedURLException e) {
+                System.out.println(e);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+
+            return "error";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            ArrayList<DishItem> items = new ArrayList<>();
+            try {
+                //System.out.println("REQUEST   ==== " + s);
+                JSONObject obj = new JSONObject(s);
+                JSONArray arr = obj.getJSONArray("response");
+                //System.out.println(arr);
+                for(int i = 0; i < arr.length(); ++i) {
+                    String name = (String)arr.getJSONObject(i).get("product_name");
+                    String photo = (String)arr.getJSONObject(i).get("photo_origin");
+                    int price = Integer.parseInt((String)arr.getJSONObject(i).getJSONObject("price").get("1"));
+                    String priceStr = Double.toString(price / 100.0);
+                    //System.out.println(price);
+                    int id = Integer.parseInt((String)arr.getJSONObject(i).get("product_id"));
+
+                    items.add(new DishItem(name, Handler.link + photo, id, priceStr, "Описание товара из чего состоит и тд. \nПункт 1\nПункт 2\nЭто должно быть но мы не успели"));
+
+                }
+            } catch (JSONException e) {
+                System.out.println(e);
+            }
+
+            addAll(items);
         }
     }
 }

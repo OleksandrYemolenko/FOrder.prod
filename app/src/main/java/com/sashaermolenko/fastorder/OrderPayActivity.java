@@ -61,7 +61,7 @@ public class OrderPayActivity extends AppCompatActivity {
     private String date;
 
     private String data[] = {"Out of restaurant", "In restaurant"};
-    private String spots[] = {"вулиця Юрія Кондратюка, 2Б, Дніпро́", "проспект Героїв, 1К", "вулиця Нижньодніпровська, 17"};
+    private String spots[];
     public static int type_id = 0, spot_index = 0;
     public static HashMap<Integer, Integer> ids = new HashMap<>();
     public static HashMap<String, Integer> indexes = new HashMap<>();
@@ -79,7 +79,7 @@ public class OrderPayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pay);
 
         context = this;
-       /* try {
+        try {
             spots = new String[MainActivity.spots.size()];
             MainActivity.spots.toArray(spots);
             ArrayList<JSONObject> aj = MainActivity.spotsObjects;
@@ -93,8 +93,8 @@ public class OrderPayActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-        } */
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        }
 
 
        pri = CartRecyclerAdapter.getTotalPrice() + '₴';
@@ -111,23 +111,6 @@ public class OrderPayActivity extends AppCompatActivity {
         Slidr.attach(this);
 
         bind();
-
-        // Get the calander
-        Calendar c = Calendar.getInstance();
-
-        // From calander get the year, month, day, hour, minute
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        date = Integer.toString(year) + "." + Integer.toString(month) + "." + Integer.toString(day);
-
-        try {
-            if(Integer.valueOf(CartRecyclerAdapter.getTotalPrice()) != 0 && MainActivity.historyItems.indexOf(new HistoryItem(date, pri)) == -1)
-                MainActivity.addItem(date, pri);
-        } catch (Exception e) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-        }
 
         //Toast.makeText(context, Integer.toString(MainActivity.cartItems.size()), Toast.LENGTH_SHORT).show();
     }
@@ -179,6 +162,24 @@ public class OrderPayActivity extends AppCompatActivity {
             AutoResolveHelper.resolveTask(
                     mPaymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE);
         }
+        // Get the calander
+        Calendar c = Calendar.getInstance();
+
+        // From calander get the year, month, day, hour, minute
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        date = Integer.toString(year) + "." + Integer.toString(month) + "." + Integer.toString(day);
+
+        try {
+            if(Integer.valueOf(CartRecyclerAdapter.getTotalPrice()) != 0 && MainActivity.historyItems.indexOf(new HistoryItem(date, pri)) == -1)
+                MainActivity.addItem(date, pri);
+        } catch (Exception e) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        //TODO отправлять запрос на оплату
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -235,29 +236,36 @@ public class OrderPayActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapterO = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spots);
-        adapterO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        try {
+            ArrayAdapter<String> adapterO = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spots);
+            adapterO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerO = (Spinner) findViewById(R.id.spinResO);
+            spinnerO.setAdapter(adapterO);
+        } catch (Exception e) {
+//            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
 
-        spinnerO = (Spinner) findViewById(R.id.spinResO);
-        spinnerO.setAdapter(adapterO);
+        try {
+            spinnerO.setPrompt("Place");
+            spinnerO.setSelection(spot_index);
+            spinnerO.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    // показываем позиция нажатого элемента
+                    //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                }
 
-        spinnerO.setPrompt("Place");
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-        spinnerO.setSelection(spot_index);
+                }
+            });
+        } catch (Exception e) {
+//            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
 
-        spinnerO.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                // показываем позиция нажатого элемента
-                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         price = (TextView) findViewById(R.id.priceO);
         price.setText(pri);

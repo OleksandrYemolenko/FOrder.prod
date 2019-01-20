@@ -67,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         ArrayList<JSONObject> aj = MainActivity.spotsObjects;
-/*        for (int i = 0; i < aj.size(); ++i) {
+        for (int i = 0; i < aj.size(); ++i) {
             try {
                 JSONObject obj = aj.get(i);
                 Double lat = Double.parseDouble(obj.get("lat").toString());
@@ -81,6 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } */
+        }
     }
 }
