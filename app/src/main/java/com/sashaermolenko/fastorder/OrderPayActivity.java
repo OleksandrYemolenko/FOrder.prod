@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import com.sashaermolenko.fastorder.Adapters.CartRecyclerAdapter;
 import com.sashaermolenko.fastorder.Fragments.CartFragment;
 import com.sashaermolenko.fastorder.Google.GooglePay;
 import com.sashaermolenko.fastorder.Google.MapsActivity;
+import com.sashaermolenko.fastorder.Items.HistoryItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,8 +58,10 @@ public class OrderPayActivity extends AppCompatActivity {
     private TextView price, time;
     public static Spinner spinner, spinnerO;
 
+    private String date;
+
     private String data[] = {"Out of restaurant", "In restaurant"};
-    private String spots[];
+    private String spots[] = {"вулиця Юрія Кондратюка, 2Б, Дніпро́", "проспект Героїв, 1К", "вулиця Нижньодніпровська, 17"};
     public static int type_id = 0, spot_index = 0;
     public static HashMap<Integer, Integer> ids = new HashMap<>();
     public static HashMap<String, Integer> indexes = new HashMap<>();
@@ -65,7 +69,7 @@ public class OrderPayActivity extends AppCompatActivity {
     private Context context;
 
     private Button map, timeD;
-    int pri;
+    private String pri;
     private static final int Time_id = 1;
     private static final int Date_id = 0;
 
@@ -75,7 +79,7 @@ public class OrderPayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pay);
 
         context = this;
-        try {
+       /* try {
             spots = new String[MainActivity.spots.size()];
             MainActivity.spots.toArray(spots);
             ArrayList<JSONObject> aj = MainActivity.spotsObjects;
@@ -90,10 +94,10 @@ public class OrderPayActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
 
-                pri = getIntent().getIntExtra("price", 0);
+       pri = CartRecyclerAdapter.getTotalPrice() + '₴';
 
         mPaymentsClient =
                 Wallet.getPaymentsClient(
@@ -107,6 +111,23 @@ public class OrderPayActivity extends AppCompatActivity {
         Slidr.attach(this);
 
         bind();
+
+        // Get the calander
+        Calendar c = Calendar.getInstance();
+
+        // From calander get the year, month, day, hour, minute
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        date = Integer.toString(year) + "." + Integer.toString(month) + "." + Integer.toString(day);
+
+        try {
+            if(Integer.valueOf(CartRecyclerAdapter.getTotalPrice()) != 0 && MainActivity.historyItems.indexOf(new HistoryItem(date, pri)) == -1)
+                MainActivity.addItem(date, pri);
+        } catch (Exception e) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        }
 
         //Toast.makeText(context, Integer.toString(MainActivity.cartItems.size()), Toast.LENGTH_SHORT).show();
     }
@@ -214,15 +235,15 @@ public class OrderPayActivity extends AppCompatActivity {
             }
         });
 
-        //ArrayAdapter<String> adapterO = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spots);
-        //adapterO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapterO = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spots);
+        adapterO.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerO = (Spinner) findViewById(R.id.spinResO);
-        //spinnerO.setAdapter(adapterO);
+        spinnerO.setAdapter(adapterO);
 
         spinnerO.setPrompt("Place");
 
-        //spinnerO.setSelection(spot_index);
+        spinnerO.setSelection(spot_index);
 
         spinnerO.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -239,7 +260,7 @@ public class OrderPayActivity extends AppCompatActivity {
         });
 
         price = (TextView) findViewById(R.id.priceO);
-        price.setText(CartRecyclerAdapter.getTotalPrice() + '₴');
+        price.setText(pri);
         time = (TextView) findViewById(R.id.timeO);
         map = (Button) findViewById(R.id.mapB);
         timeD = (Button) findViewById(R.id.timeD);

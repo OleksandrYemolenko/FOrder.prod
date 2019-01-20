@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.r0adkll:slidableactivity:2.0.6'
     implementation 'com.google.android.gms:play-services-wallet:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
 }

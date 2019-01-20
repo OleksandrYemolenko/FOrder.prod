@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sashaermolenko.fastorder.DishActivity;
 import com.sashaermolenko.fastorder.Items.HistoryItem;
@@ -27,7 +28,12 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     public HistoryRecyclerAdapter(Context context) {
         this.context = context;
-        this.items = MainActivity.historyItems;
+        try {
+            if(MainActivity.historyItems.get(0).getDate() != "asd")
+                this.items = MainActivity.historyItems;
+        }catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @NonNull
@@ -74,7 +80,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         public void bind(final HistoryItem recyclerItem) {
 
             date.setText(recyclerItem.getDate());
-            price.setText(recyclerItem.getPrice() + '₴');
+            price.setText(recyclerItem.getPrice());
         }
 
 

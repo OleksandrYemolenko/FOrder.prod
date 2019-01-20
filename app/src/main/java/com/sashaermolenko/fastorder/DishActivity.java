@@ -47,9 +47,9 @@ public class DishActivity extends AppCompatActivity {
             items_3.add(new DishItem("Латте", "https://www.nespresso.com/ncp/res/uploads/recipes/1900px_Global_OL_ALL_Coffee%20Moment_Recipe_Latte%20Macchiato_2017_2019.jpg", 1, "300", "asd"));
             items_3.add(new DishItem("Капучино", "http://coffeemap.com.ua/wp-content/uploads/2018/09/kapuchino-recept-i-tonkosti-prigotovlenija.png", 2, "300", "asd"));
 
-            items_4.add(new DishItem("Рибай", "https://easydine.ru/wp-content/uploads/2016/01/steyk-ribay-1.jpg", 0, "300", "asd"));
-            items_4.add(new DishItem("Томагавк", "https://t-bone.ua/wp-content/uploads/2017/08/tomagavk-stejk.jpg", 1, "300", "asd"));
-            items_4.add(new DishItem("Тибон", "http://2tarelki.ru/wp-content/uploads/2017/07/IMG_2675.jpg", 2, "300", "asd"));
+            items_4.add(new DishItem("Рибай", "https://easydine.ru/wp-content/uploads/2016/01/steyk-ribay-1.jpg", 0, "1800", "Стейк рибай - это высококачественная мраморная говядина, имеющая достаточно большое количество жировых прослоек."));
+            items_4.add(new DishItem("Томагавк", "https://t-bone.ua/wp-content/uploads/2017/08/tomagavk-stejk.jpg", 1, "1600", "Стейк Томагавк — это рибай на кости, у которого реберная кость сохранена почти полностью."));
+            items_4.add(new DishItem("Тибон", "http://2tarelki.ru/wp-content/uploads/2017/07/IMG_2675.jpg", 2, "1600", "Ти-Бон — это классический мужской стейк. Его покупают гурманы, тонко чувствующие разницу мраморного мяса и осознающие свои предпочтения. "));
 
             MainActivity.flag = 1;
         }

@@ -33,6 +33,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
     public CartRecyclerAdapter(Context context) {
         this.context = context;
         items = MainActivity.cartItems;
+        totalPrice = 0;
         for(int i = 0; i < items.size(); ++i)
             totalPrice += items.get(i).getAmount() * Integer.valueOf(items.get(i).getPrice());
     }
