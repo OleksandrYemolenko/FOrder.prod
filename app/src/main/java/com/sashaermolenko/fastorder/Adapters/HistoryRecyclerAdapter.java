@@ -44,7 +44,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, final int position) {
         final HistoryItem historyItem = items.get(position);
 
         holder.bind(historyItem);
@@ -52,8 +52,12 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         holder.itemView.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, DishActivity.class);
-                context.startActivity(i);
+               try{
+                   MainActivity.cartItems = MainActivity.allHistory.get(position);
+//                   Toast.makeText(context, Integer.toString(MainActivity.cartItems.size()), Toast.LENGTH_LONG).show();
+               } catch (Exception e) {
+                   Toast.makeText(context, Integer.toString(MainActivity.allHistory.size()), Toast.LENGTH_LONG).show();
+               }
                 //MainActivity.ChangeAct(context);
             }
         });

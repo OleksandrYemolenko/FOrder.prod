@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -48,6 +49,7 @@ import com.sashaermolenko.fastorder.Items.HistoryItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class OrderPayActivity extends AppCompatActivity {
 
@@ -68,7 +70,8 @@ public class OrderPayActivity extends AppCompatActivity {
 
     private Context context;
 
-    private Button map, timeD;
+    private Button timeD;
+    private ImageButton map;
     private String pri;
     private static final int Time_id = 1;
     private static final int Date_id = 0;
@@ -174,7 +177,7 @@ public class OrderPayActivity extends AppCompatActivity {
 
         try {
             if(Integer.valueOf(CartRecyclerAdapter.getTotalPrice()) != 0 && MainActivity.historyItems.indexOf(new HistoryItem(date, pri)) == -1)
-                MainActivity.addItem(date, pri);
+                MainActivity.addItem(date, pri, MainActivity.cartItems);
         } catch (Exception e) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
@@ -265,16 +268,22 @@ public class OrderPayActivity extends AppCompatActivity {
 //            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
 
+        TextView forFont = (TextView) findViewById(R.id.orderGet);
+        forFont.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
 
+        forFont = (TextView) findViewById(R.id.placeChoose);
+        forFont.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
+
+        forFont = (TextView) findViewById(R.id.fullPrice);
+        forFont.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
 
         price = (TextView) findViewById(R.id.priceO);
         price.setText(pri);
         time = (TextView) findViewById(R.id.timeO);
-        map = (Button) findViewById(R.id.mapB);
+        map = (ImageButton) findViewById(R.id.mapB);
         timeD = (Button) findViewById(R.id.timeD);
         price.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
         time.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
-        map.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
         timeD.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
         timeD.setOnClickListener(new View.OnClickListener() {
 

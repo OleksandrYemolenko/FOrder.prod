@@ -2,6 +2,7 @@ package com.sashaermolenko.fastorder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import com.sashaermolenko.fastorder.Fragments.MenuFragment;
 import com.sashaermolenko.fastorder.Fragments.SettingsFragment;
 import com.sashaermolenko.fastorder.Items.CartItem;
 import com.sashaermolenko.fastorder.Items.HistoryItem;
+import com.sashaermolenko.fastorder.Login.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,11 +37,13 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static int flag = 0;
+    public static final String STORAGE_NAME = "STORAGE";
     private static Context context;
     private FrameLayout frameLayout;
     private BottomNavigationView navigation;
     public static ArrayList<CartItem> cartItems = new ArrayList<>();
     public static ArrayList<HistoryItem> historyItems;
+    public static ArrayList<ArrayList<CartItem> > allHistory = new ArrayList<>();
     public static ArrayList<String> spots = new ArrayList<>();
     public static ArrayList<JSONObject> spotsObjects = new ArrayList<>();
 
@@ -68,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.frame_layout, historyFragment);
                     fragmentTransaction.commit();
                     return true;
-                case R.id.navigation_settings:
+                /*case R.id.navigation_settings:
                     SettingsFragment settingsFragment = new SettingsFragment();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame_layout, settingsFragment);
                     fragmentTransaction.commit();
-                    return true;
+                    return true; */
             }
             return false;
         }
@@ -87,6 +91,19 @@ public class MainActivity extends AppCompatActivity {
         bind();
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        SharedPreferences sp = this.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        //editor.putBoolean("isLogined", false);
+        //editor.commit();
+
+        boolean logined = sp.getBoolean("isLogined", false);
+
+        if(!logined) {
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     @Override
@@ -106,11 +123,12 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
         historyItems = getHistoryItems();
+        allHistory = getAllHistoryItems();
 
 //        historyItems = null;
 
         if(historyItems == null) {
-            addItem("asd", "asd");
+            addItem("asd", "asd", null);
         }
 
         context = this;
@@ -121,11 +139,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<HistoryItem> getHistoryItems() {
         //importing all data into JSON objects array(phones) from database
         ArrayList<HistoryItem> historyItems = JSONHelper.importFromJSON(this);
-
         return historyItems;
     }
 
-    public static void addItem(String date, String price) {
+    private ArrayList<ArrayList<CartItem> > getAllHistoryItems() {
+        //importing all data into JSON objects array(phones) from database
+        ArrayList<ArrayList<CartItem> > historyItems = JSONHelper.importAllFromJSON(this);
+        return historyItems;
+    }
+
+    public static void addItem(String date, String price, ArrayList<CartItem> list) {
         try {
             HistoryItem hi = new HistoryItem(date, price);
             ArrayList<HistoryItem> his = new ArrayList<>();
@@ -134,6 +157,15 @@ public class MainActivity extends AppCompatActivity {
                 his.addAll(historyItems);
             }
             historyItems = his;
+
+            ArrayList<ArrayList<CartItem> > allHistoryF = new ArrayList<>();
+
+            allHistoryF =  allHistory;
+
+            allHistoryF.add(list);
+
+            allHistory = allHistoryF;
+
         } catch (Exception e) {
             Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
@@ -150,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         //exporting all received data into JSON object in database
 
-        boolean result = JSONHelper.exportToJSON(this, historyItems);
+        boolean result = JSONHelper.exportToJSON(this, historyItems, allHistory);
 
 //        if(result){
 //            Toast.makeText(this, "Данные сохранены", Toast.LENGTH_LONG).show();

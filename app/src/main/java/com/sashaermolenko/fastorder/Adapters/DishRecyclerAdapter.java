@@ -234,8 +234,9 @@ public class DishRecyclerAdapter extends RecyclerView.Adapter<DishRecyclerAdapte
                     String priceStr = Double.toString(price / 100.0);
                     //System.out.println(price);
                     int id = Integer.parseInt((String)arr.getJSONObject(i).get("product_id"));
+                    String desc = (String)arr.getJSONObject(i).get("product_production_description");
 
-                    items.add(new DishItem(name, Handler.link + photo, id, priceStr, "Описание товара из чего состоит и тд. \nПункт 1\nПункт 2\nЭто должно быть но мы не успели"));
+                    items.add(new DishItem(name, Handler.link + photo, id, priceStr, desc));
 
                 }
             } catch (JSONException e) {

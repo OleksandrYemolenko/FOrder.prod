@@ -31,6 +31,25 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDjgfR1P5MpP8BUoFvJcrqTA_1xBJ-TVhE" />
+
+        <activity android:name=".Login.LoginActivity"
+            android:theme="@style/AppTheme_log">
+            <intent-filter>
+                <action android:name="android.intent.action.LOGIN" />
+
+                <category android:name="android.intent.category.LOGIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Login.PassActivity"
+            android:parentActivityName=".Login.LoginActivity"
+            android:theme="@style/AppTheme_log">
+            <intent-filter>
+                <action android:name="android.intent.action.PASS" />
+
+                <category android:name="android.intent.category.PASS" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
